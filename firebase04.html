@@ -168,6 +168,12 @@
   .item-menu button:hover{background:var(--paper);}
   .item-menu button.danger{color:var(--coral);}
 
+  .inline-toast{
+    position:absolute; top:0; right:0; z-index:20; max-width:230px;
+    background:var(--ink); color:#fff; font-size:.78rem; line-height:1.4;
+    padding:10px 12px; border-radius:10px; box-shadow:0 6px 18px rgba(23,50,56,.18);
+  }
+
   .item-comment{
     margin-top:8px; padding:8px 10px; background:var(--paper); border-radius:8px;
     font-size:.84rem; color:var(--ink-soft); border-left:3px solid var(--dot,var(--ink-soft));
@@ -521,6 +527,14 @@ var DB_PATH = 'okinawa-trip-2026/itinerary';
   }
   document.addEventListener('click', closeAllMenus);
 
+  function showToast(hostEl, message){
+    var old = hostEl.querySelector('.inline-toast');
+    if(old) old.remove();
+    var toast = el('div','inline-toast', message);
+    hostEl.appendChild(toast);
+    setTimeout(function(){ toast.remove(); }, 2600);
+  }
+
   function buildMenu(dayId, group, id, item, hostEl){
     var menu = el('div','item-menu');
     var editBtn = el('button','', '修改'); editBtn.type='button';
@@ -541,9 +555,12 @@ var DB_PATH = 'okinawa-trip-2026/itinerary';
     mapBtn.addEventListener('click', function(e){
       e.stopPropagation();
       closeAllMenus();
-      var q = (item.address && item.address.trim()) || item.name || item.text || '';
-      if(!q){ alert('這個行程還沒有地址或名稱可以查詢，先按「修改」補上地址吧。'); return; }
-      window.open('https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(q), '_blank');
+      var addr = (item.address || '').trim();
+      if(!addr){
+        showToast(hostEl, '這個行程還沒有地址，請先按「修改」補上地址。');
+        return;
+      }
+      window.open('https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(addr), '_blank');
     });
     delBtn.addEventListener('click', function(e){
       e.stopPropagation();
