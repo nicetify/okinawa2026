@@ -20,6 +20,8 @@
     --teal-dim:#DCEFEB;
     --line:#CBD6C8;
     --card:#FBFBF6;
+    --gold:#E0A233;
+    --gold-dim:#F6E7C6;
   }
   *{box-sizing:border-box; margin:0; padding:0;}
   html{scroll-behavior:smooth;}
@@ -135,6 +137,7 @@
   }
   .tag.stroll{background:var(--teal-dim); color:var(--teal);}
   .tag.carry{background:var(--coral-dim); color:var(--coral);}
+  .tag.comment{background:var(--gold-dim); color:#8A6316;}
   .tag svg{width:11px; height:11px;}
 
   /* meals */
@@ -493,15 +496,16 @@ var DB_PATH = 'okinawa-trip-2026/itinerary';
     if(text !== undefined) e.textContent = text;
     return e;
   }
-  function tagChip(kind){
+  function tagChip(kind, iconName, label){
     var span = el('span', 'tag ' + kind);
-    var svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
-    var use = document.createElementNS('http://www.w3.org/2000/svg','use');
-    use.setAttributeNS('http://www.w3.org/1999/xlink','href', kind==='stroll' ? '#ic-stroll' : '#ic-carry');
-    svg.appendChild(use);
-    span.appendChild(svg);
-    span.appendChild(document.createTextNode(kind==='stroll' ? '推車 OK' : '揹巾必備'));
+    span.appendChild(iconUse(iconName));
+    span.appendChild(document.createTextNode(label));
     return span;
+  }
+  function presetTag(kind){
+    if(kind==='stroll') return tagChip('stroll','stroll','推車 OK');
+    if(kind==='carry') return tagChip('carry','carry','揹巾必備');
+    return null;
   }
   function iconUse(name){
     var svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
@@ -551,12 +555,9 @@ var DB_PATH = 'okinawa-trip-2026/itinerary';
     var time = el('span','tl-time', item.time);
     var text = el('span','tl-text');
     text.appendChild(document.createTextNode(item.text));
-    (item.tags||[]).forEach(function(t){ text.appendChild(tagChip(t)); });
+    (item.tags||[]).forEach(function(t){ var chip = presetTag(t); if(chip) text.appendChild(chip); });
+    if(item.comment){ text.appendChild(tagChip('comment','note', item.comment)); }
     div.append(time, text);
-    if(item.comment){
-      var c = el('div','item-comment', '💬 ' + item.comment);
-      div.appendChild(c);
-    }
     return div;
   }
 
@@ -567,15 +568,35 @@ var DB_PATH = 'okinawa-trip-2026/itinerary';
     head.appendChild(document.createTextNode(item.label||''));
     div.appendChild(head);
     div.appendChild(buildMenu(dayId,'meals',id,item));
-    div.appendChild(el('div','m-name', item.name||''));
+    var nameDiv = el('div','m-name');
+    nameDiv.appendChild(document.createTextNode(item.name||''));
+    if(item.comment){ nameDiv.appendChild(tagChip('comment','note', item.comment)); }
+    div.appendChild(nameDiv);
     if(item.note) div.appendChild(el('div','m-note', item.note));
-    if(item.comment) div.appendChild(el('div','item-comment', '💬 ' + item.comment));
     return div;
   }
 
   function sortedEntries(obj){
     return Object.keys(obj||{}).map(function(k){ return [k, obj[k]]; })
       .sort(function(a,b){ return (a[1].order||0) - (b[1].order||0); });
+  }
+
+  function timeToMinutes(t){
+    var m = /^(\d{1,2}):(\d{2})/.exec((t||'').trim());
+    if(!m) return null;
+    return parseInt(m[1],10)*60 + parseInt(m[2],10);
+  }
+
+  function sortedByTime(obj){
+    return Object.keys(obj||{}).map(function(k){ return [k, obj[k]]; })
+      .sort(function(a,b){
+        var ta = timeToMinutes(a[1].time), tb = timeToMinutes(b[1].time);
+        if(ta===null && tb===null) return (a[1].order||0) - (b[1].order||0);
+        if(ta===null) return 1;
+        if(tb===null) return -1;
+        if(ta!==tb) return ta - tb;
+        return (a[1].order||0) - (b[1].order||0);
+      });
   }
 
   function renderAll(data){
@@ -585,7 +606,7 @@ var DB_PATH = 'okinawa-trip-2026/itinerary';
       var mealWrap = document.getElementById('meals-'+dayId);
       tlWrap.innerHTML = '';
       mealWrap.innerHTML = '';
-      sortedEntries(dayData.items).forEach(function(pair){
+      sortedByTime(dayData.items).forEach(function(pair){
         tlWrap.appendChild(renderTimelineItem(dayId, pair[0], pair[1]));
       });
       sortedEntries(dayData.meals).forEach(function(pair){
