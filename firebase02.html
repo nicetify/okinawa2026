@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>沖繩親子六日行 · 11.18–11.23</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&family=Noto+Sans+TC:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#EFF4EE;
+    --ink:#173238;
+    --ink-soft:#3F5C60;
+    --indigo:#1F5C73;
+    --indigo-dim:#DCE7EA;
+    --coral:#E1543C;
+    --coral-dim:#FBE1DA;
+    --teal:#25917E;
+    --teal-dim:#DCEFEB;
+    --line:#CBD6C8;
+    --card:#FBFBF6;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:"Noto Sans TC", sans-serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.display{
+    font-family:"Noto Serif TC", serif;
+    font-weight:700;
+    letter-spacing:.02em;
+  }
+  a{color:inherit;}
+  button{font:inherit; cursor:pointer;}
+  textarea,input{font:inherit;}
+
+  /* ---------- Region nav strip ---------- */
+  .tide-nav{
+    position:sticky; top:0; z-index:50;
+    display:flex;
+    background:var(--ink);
+    overflow-x:auto;
+    scrollbar-width:none;
+  }
+  .tide-nav::-webkit-scrollbar{display:none;}
+  .tide-nav a{
+    flex:1 0 auto; min-width:78px; text-align:center; text-decoration:none;
+    color:#fff; padding:10px 6px 8px; font-size:.72rem; letter-spacing:.03em;
+    border-bottom:3px solid transparent; transition:background .2s ease; white-space:nowrap;
+  }
+  .tide-nav a span{display:block;}
+  .tide-nav a .d{font-family:"IBM Plex Mono",monospace; font-size:.68rem; opacity:.75; margin-top:2px;}
+  .tide-nav a.south{border-color:var(--indigo);}
+  .tide-nav a.mid{border-color:var(--coral);}
+  .tide-nav a.north{border-color:var(--teal);}
+  .tide-nav a:hover{background:rgba(255,255,255,.08);}
+
+  /* ---------- Hero ---------- */
+  .hero{ padding:76px 24px 40px; max-width:920px; margin:0 auto; }
+  .hero .eyebrow{
+    font-family:"IBM Plex Mono",monospace; font-size:.78rem; letter-spacing:.12em;
+    color:var(--ink-soft); text-transform:uppercase; margin-bottom:18px;
+  }
+  .hero h1{ font-size:clamp(2.4rem, 6vw, 4.2rem); line-height:1.1; max-width:12ch; }
+  .hero h1 em{ font-style:normal; color:var(--coral); }
+  .hero .sub{ margin-top:22px; font-size:1.05rem; color:var(--ink-soft); max-width:60ch; }
+  .route-strip{
+    margin-top:34px; display:flex; align-items:center; flex-wrap:wrap; gap:6px 2px;
+    font-family:"IBM Plex Mono",monospace; font-size:.85rem;
+  }
+  .route-strip .stop{ padding:5px 12px; border-radius:100px; font-weight:600; white-space:nowrap; }
+  .route-strip .stop.south{background:var(--indigo-dim); color:var(--indigo);}
+  .route-strip .stop.mid{background:var(--coral-dim); color:var(--coral);}
+  .route-strip .stop.north{background:var(--teal-dim); color:var(--teal);}
+  .route-strip .arrow{color:var(--line);}
+
+  .stat-row{ margin-top:40px; display:grid; grid-template-columns:repeat(4,1fr); border-top:1px solid var(--line); }
+  .stat-row div{ padding:16px 4px 0; border-left:1px solid var(--line); }
+  .stat-row div:first-child{border-left:none;}
+  .stat-row .num{ font-family:"Noto Serif TC",serif; font-weight:900; font-size:1.8rem; }
+  .stat-row .lbl{ font-size:.72rem; color:var(--ink-soft); margin-top:2px; }
+
+  /* ---------- Sync bar ---------- */
+  .sync-bar{max-width:920px; margin:0 auto 8px; padding:0 24px;}
+  .sync-inner{
+    background:var(--card); border:1px solid var(--line); border-radius:16px; padding:18px 20px;
+    display:flex; flex-wrap:wrap; gap:16px; align-items:center; justify-content:space-between;
+  }
+  .sync-status strong{display:block; font-size:.92rem; margin-bottom:2px;}
+  .sync-status span{font-size:.8rem; color:var(--ink-soft);}
+  .sync-actions{display:flex; align-items:center; gap:10px; flex-wrap:wrap;}
+  .sync-pill{ font-family:"IBM Plex Mono",monospace; font-size:.76rem; background:var(--indigo-dim); color:var(--indigo); padding:4px 10px; border-radius:100px; }
+  .sync-time{font-size:.74rem; color:var(--ink-soft);}
+  @media (max-width:600px){ .sync-inner{flex-direction:column; align-items:flex-start;} }
+
+  /* ---------- Day sections ---------- */
+  .day{ padding:56px 24px 40px; max-width:920px; margin:0 auto; border-top:1px solid var(--line); }
+  .day-head{ display:flex; align-items:baseline; gap:20px; flex-wrap:wrap; margin-bottom:8px; }
+  .day-num{ font-family:"IBM Plex Mono",monospace; font-size:.85rem; padding:4px 10px; border-radius:100px; font-weight:600; }
+  .south .day-num{background:var(--indigo-dim); color:var(--indigo);}
+  .mid .day-num{background:var(--coral-dim); color:var(--coral);}
+  .north .day-num{background:var(--teal-dim); color:var(--teal);}
+  .day-date{ font-family:"IBM Plex Mono",monospace; color:var(--ink-soft); font-size:.95rem; }
+  .day h2{ font-size:clamp(1.5rem, 3.4vw, 2.1rem); margin-top:10px; max-width:26ch; }
+  .south h2{color:var(--indigo);} .mid h2{color:var(--coral);} .north h2{color:var(--teal);}
+
+  .day-grid{ margin-top:36px; display:grid; grid-template-columns: 1fr 300px; gap:36px; }
+  @media (max-width:760px){
+    .day-grid{grid-template-columns:1fr;}
+    .stat-row{grid-template-columns:repeat(2,1fr);}
+    .stat-row div:nth-child(3){border-left:none;}
+  }
+
+  /* timeline */
+  .timeline{ border-left:2px solid var(--line); padding-left:22px; }
+  .tl-item{ position:relative; padding:0 34px 26px 0; }
+  .tl-item::before{
+    content:""; position:absolute; left:-27px; top:5px; width:11px; height:11px;
+    border-radius:50%; background:var(--card); border:2px solid var(--dot,var(--ink-soft));
+  }
+  .south .tl-item{--dot:var(--indigo);}
+  .mid .tl-item{--dot:var(--coral);}
+  .north .tl-item{--dot:var(--teal);}
+  .tl-time{ font-family:"IBM Plex Mono",monospace; font-weight:600; font-size:.86rem; display:block; margin-bottom:4px; }
+  .tl-text{ font-size:.96rem; display:block; margin-top:2px; }
+
+  .tag{
+    display:inline-flex; align-items:center; gap:4px; font-family:"IBM Plex Mono",monospace;
+    font-size:.68rem; padding:2px 8px; border-radius:100px; margin-left:6px; white-space:nowrap; vertical-align:middle;
+  }
+  .tag.stroll{background:var(--teal-dim); color:var(--teal);}
+  .tag.carry{background:var(--coral-dim); color:var(--coral);}
+  .tag svg{width:11px; height:11px;}
+
+  /* meals */
+  .meals{ display:flex; flex-direction:column; gap:14px; }
+  .meal-card{ position:relative; background:var(--card); border:1px solid var(--line); border-radius:14px; padding:16px 40px 16px 18px; }
+  .meal-card .m-head{
+    display:flex; align-items:center; gap:8px; font-family:"IBM Plex Mono",monospace;
+    font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-soft); margin-bottom:8px;
+  }
+  .meal-card svg{width:16px; height:16px; flex-shrink:0;}
+  .south .meal-card svg{color:var(--indigo);}
+  .mid .meal-card svg{color:var(--coral);}
+  .north .meal-card svg{color:var(--teal);}
+  .meal-card .m-name{font-weight:600; font-size:.98rem; margin-bottom:4px;}
+  .meal-card .m-note{font-size:.86rem; color:var(--ink-soft);}
+
+  /* ⋯ action menu (shared by timeline items + meal cards) */
+  .item-more{
+    position:absolute; top:8px; right:0; width:26px; height:26px; border-radius:50%;
+    border:1px solid var(--line); background:var(--card); color:var(--ink-soft);
+    font-size:1rem; line-height:1; display:flex; align-items:center; justify-content:center;
+  }
+  .item-more:hover{background:var(--paper);}
+  .item-menu{
+    display:none; position:absolute; top:36px; right:0; z-index:10; background:#fff;
+    border:1px solid var(--line); border-radius:10px; box-shadow:0 6px 18px rgba(23,50,56,.12);
+    overflow:hidden; min-width:110px;
+  }
+  .item-menu.open{display:block;}
+  .item-menu button{
+    display:block; width:100%; text-align:left; padding:9px 14px; font-size:.82rem;
+    border:none; background:none; color:var(--ink);
+  }
+  .item-menu button:hover{background:var(--paper);}
+  .item-menu button.danger{color:var(--coral);}
+
+  .item-comment{
+    margin-top:8px; padding:8px 10px; background:var(--paper); border-radius:8px;
+    font-size:.84rem; color:var(--ink-soft); border-left:3px solid var(--dot,var(--ink-soft));
+  }
+  .meal-card .item-comment{--dot:var(--ink-soft);}
+
+  /* edit / add forms */
+  .edit-form{ display:flex; flex-direction:column; gap:8px; }
+  .edit-form input[type=text], .edit-form textarea{
+    width:100%; padding:8px 10px; border:1px solid var(--line); border-radius:8px;
+    background:#fff; color:var(--ink); font-size:.9rem;
+  }
+  .edit-form textarea{min-height:64px; resize:vertical;}
+  .edit-form .row{display:flex; gap:8px;}
+  .edit-form .row-actions{display:flex; gap:8px; justify-content:flex-end;}
+  .btn-mini{
+    font-family:"IBM Plex Mono",monospace; font-size:.78rem; padding:6px 14px; border-radius:100px;
+    border:1px solid var(--ink); background:transparent; color:var(--ink);
+  }
+  .btn-mini.primary{background:var(--ink); color:#fff;}
+  .btn-mini:hover{opacity:.75;}
+
+  .add-item-btn{
+    margin-top:18px; font-family:"IBM Plex Mono",monospace; font-size:.82rem; padding:9px 16px;
+    border-radius:100px; border:1px dashed var(--ink-soft); background:transparent; color:var(--ink-soft);
+    display:inline-block;
+  }
+  .add-item-btn:hover{border-style:solid; color:var(--ink);}
+  .add-form-wrap{
+    margin-top:18px; padding:16px; border:1px solid var(--line); border-radius:12px; background:var(--card);
+  }
+
+  /* kid tip (static, not editable) */
+  .kid-tip{
+    margin-top:22px; background:var(--ink); color:#F5F5EE; border-radius:16px; padding:20px 22px;
+    display:flex; gap:14px; align-items:flex-start;
+  }
+  .kid-tip svg{width:22px; height:22px; flex-shrink:0; margin-top:2px;}
+  .south .kid-tip svg{color:var(--indigo-dim);}
+  .mid .kid-tip svg{color:var(--coral-dim);}
+  .north .kid-tip svg{color:var(--teal-dim);}
+  .kid-tip .kt-label{
+    font-family:"IBM Plex Mono",monospace; font-size:.7rem; letter-spacing:.1em;
+    text-transform:uppercase; color:#B9C4BE; margin-bottom:4px;
+  }
+  .kid-tip p{font-size:.92rem; line-height:1.7;}
+
+  footer{ padding:48px 24px 80px; max-width:920px; margin:0 auto; color:var(--ink-soft); font-size:.85rem; border-top:1px solid var(--line); }
+  footer .display{color:var(--ink); font-size:1.1rem; margin-bottom:8px; display:block;}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <symbol id="ic-sunrise" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M5 18h14M12 14v-5M8.5 10.5L12 7l3.5 3.5M4 21h16"/></symbol>
+    <symbol id="ic-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M18.4 5.6L17 7M7 17l-1.4 1.4"/></symbol>
+    <symbol id="ic-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z"/></symbol>
+    <symbol id="ic-stroll" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11h11l2 2M6 11V7a3 3 0 0 1 3-3h1"/><circle cx="8" cy="19" r="1.6"/><circle cx="16" cy="19" r="1.6"/><path d="M4 19h2M18 19h2"/></symbol>
+    <symbol id="ic-carry" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21V13a4 4 0 0 1 8 0v8"/><path d="M5 21h14"/><circle cx="12" cy="7" r="2.4"/></symbol>
+    <symbol id="ic-note" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16.2v.1"/></symbol>
+  </defs>
+</svg>
+
+<nav class="tide-nav">
+  <a href="#d1" class="south"><span>Day 1</span><span class="d">11.18 那霸</span></a>
+  <a href="#d2" class="mid"><span>Day 2</span><span class="d">11.19 北谷</span></a>
+  <a href="#d3" class="north"><span>Day 3</span><span class="d">11.20 北部</span></a>
+  <a href="#d4" class="mid"><span>Day 4</span><span class="d">11.21 沖繩市</span></a>
+  <a href="#d5" class="south"><span>Day 5</span><span class="d">11.22 那霸</span></a>
+  <a href="#d6" class="south"><span>Day 6</span><span class="d">11.23 返程</span></a>
+</nav>
+
+<header class="hero">
+  <div class="eyebrow">Okinawa Family Itinerary · 11.18 — 11.23</div>
+  <h1>沖繩親子<em>六日</em>行</h1>
+  <p class="sub">點每個行程右上角的「⋯」可以修改、刪除、或加註解；每天最下面可以直接新增行程。所有變更會即時同步給所有打開這個網址的人。</p>
+
+  <div class="route-strip">
+    <span class="stop south">那霸</span><span class="arrow">→</span>
+    <span class="stop mid">北谷 · 美國村</span><span class="arrow">→</span>
+    <span class="stop north">名護 · 古宇利</span><span class="arrow">→</span>
+    <span class="stop mid">沖繩市</span><span class="arrow">→</span>
+    <span class="stop south">那霸 · 瀨長島</span>
+  </div>
+
+  <div class="stat-row">
+    <div><div class="num">6</div><div class="lbl">天數</div></div>
+    <div><div class="num">2</div><div class="lbl">孩子（3歲＋1歲）</div></div>
+    <div><div class="num">5</div><div class="lbl">晚住宿</div></div>
+    <div><div class="num">3</div><div class="lbl">城市／區域</div></div>
+  </div>
+</header>
+
+<section class="sync-bar">
+  <div class="sync-inner">
+    <div class="sync-status" id="syncStatus">
+      <strong>正在連線 …</strong>
+      <span>使用 Firebase 即時資料庫，行程的新增／修改／刪除都會同步給所有人。</span>
+    </div>
+    <div class="sync-actions">
+      <span class="sync-pill" id="syncPill">狀態：連線中</span>
+      <span class="sync-time" id="syncTime"></span>
+    </div>
+  </div>
+</section>
+
+<!-- DAY 1 -->
+<section class="day south" id="d1">
+  <div class="day-head"><span class="day-num">DAY 01</span><span class="day-date">11/18（三）</span></div>
+  <h2>抵達沖繩 ➔ 國際通首夜</h2>
+  <div class="day-grid">
+    <div>
+      <div class="timeline" id="tl-d1"></div>
+      <button class="add-item-btn" data-day="d1">＋ 新增行程</button>
+    </div>
+    <div class="meals" id="meals-d1"></div>
+  </div>
+  <div class="kid-tip">
+    <svg><use href="#ic-note"/></svg>
+    <div><div class="kt-label">親子第一晚提醒</div>
+      <p>長途搭機加上出關，1 歲與 3 歲寶寶體力消耗大，第一晚不安排緊湊活動，辦理完入住後建議以休息、吃熱騰騰拉麵為主。</p>
+    </div>
+  </div>
+</section>
+
+<!-- DAY 2 -->
+<section class="day mid" id="d2">
+  <div class="day-head"><span class="day-num">DAY 02</span><span class="day-date">11/19（四）</span></div>
+  <h2>市區取車 ➔ 普天滿宮 ➔ 港川外人住宅 ➔ 美國村入住</h2>
+  <div class="day-grid">
+    <div>
+      <div class="timeline" id="tl-d2"></div>
+      <button class="add-item-btn" data-day="d2">＋ 新增行程</button>
+    </div>
+    <div class="meals" id="meals-d2"></div>
+  </div>
+  <div class="kid-tip">
+    <svg><use href="#ic-note"/></svg>
+    <div><div class="kt-label">親子普天滿宮注意</div>
+      <p>鐘乳石洞內階梯濕滑且較窄，禁止使用推車。1 歲寶寶請務必使用揹巾緊抱，3 歲大寶需大人緊牽慢行。</p>
+    </div>
+  </div>
+</section>
+
+<!-- DAY 3 -->
+<section class="day north" id="d3">
+  <div class="day-head"><span class="day-num">DAY 03</span><span class="day-date">11/20（五）</span></div>
+  <h2>北部經典遊：美麗海水族館 ➔ 古宇利島貝殼博物館</h2>
+  <div class="day-grid">
+    <div>
+      <div class="timeline" id="tl-d3"></div>
+      <button class="add-item-btn" data-day="d3">＋ 新增行程</button>
+    </div>
+    <div class="meals" id="meals-d3"></div>
+  </div>
+  <div class="kid-tip">
+    <svg><use href="#ic-note"/></svg>
+    <div><div class="kt-label">親子貝殼博物館注意</div>
+      <p>登塔需要乘坐「自動無人遊覽車」上山，3 歲大寶與 1 歲二寶都會對會動的小車充滿驚奇！館內有無障礙電梯。</p>
+    </div>
+  </div>
+</section>
+
+<!-- DAY 4 -->
+<section class="day mid" id="d4">
+  <div class="day-head"><span class="day-num">DAY 04</span><span class="day-date">11/21（六）</span></div>
+  <h2>婚禮日分兵 ➔ AEON 購物 ➔ 東南植物園點燈</h2>
+  <div class="day-grid">
+    <div>
+      <div class="timeline" id="tl-d4"></div>
+      <button class="add-item-btn" data-day="d4">＋ 新增行程</button>
+    </div>
+    <div class="meals" id="meals-d4"></div>
+  </div>
+  <div class="kid-tip">
+    <svg><use href="#ic-note"/></svg>
+    <div><div class="kt-label">親子分兵提示</div>
+      <p>留守組大人帶兩個孩子在安良波公園會出汗，行李全在車上，可隨時拿出一套乾淨衣物在公園或車內替換，不必擔心。</p>
+    </div>
+  </div>
+</section>
+
+<!-- DAY 5 -->
+<section class="day south" id="d5">
+  <div class="day-head"><span class="day-num">DAY 05</span><span class="day-date">11/22（日）</span></div>
+  <h2>首里城 ➔ 瀨長島 ➔ OTS 還車 ➔ 那霸市區血拼</h2>
+  <div class="day-grid">
+    <div>
+      <div class="timeline" id="tl-d5"></div>
+      <button class="add-item-btn" data-day="d5">＋ 新增行程</button>
+    </div>
+    <div class="meals" id="meals-d5"></div>
+  </div>
+  <div class="kid-tip">
+    <svg><use href="#ic-note"/></svg>
+    <div><div class="kt-label">親子首里城與瀨長島注意</div>
+      <p>首里城多石階，務必穿著好走鞋子；瀨長島全為階梯，極不推推車。此段建議完全使用揹巾，大寶手牽緊。</p>
+    </div>
+  </div>
+</section>
+
+<!-- DAY 6 -->
+<section class="day south" id="d6">
+  <div class="day-head"><span class="day-num">DAY 06</span><span class="day-date">11/23（一）</span></div>
+  <h2>波上宮祈福 ➔ 機場最後採購 ➔ 溫暖的家</h2>
+  <div class="day-grid">
+    <div>
+      <div class="timeline" id="tl-d6"></div>
+      <button class="add-item-btn" data-day="d6">＋ 新增行程</button>
+    </div>
+    <div class="meals" id="meals-d6"></div>
+  </div>
+  <div class="kid-tip">
+    <svg><use href="#ic-note"/></svg>
+    <div><div class="kt-label">機場補貨秘訣</div>
+      <p>那霸機場國際線出發大廳店家較少，但國內線極其繁華。辦理完國際線託運後，請務必帶孩子走連通道前往國內線逛街與用餐，時間最充裕。</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span class="display">一路平安，玩得開心 🌺</span>
+  南部（那霸／瀨長島）· 中部（北谷／沖繩市）· 北部（名護／古宇利）— 六天，三種顏色，一個沖繩。
+</footer>
+
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-database-compat.js"></script>
+
+<script>
+/* ===================== FIREBASE 設定 ===================== */
+var firebaseConfig = {
+  apiKey: "AIzaSyDBmxP5ttIE-fWvqpSbH8928rcLoo-8ztU",
+  authDomain: "okinawa2026-60fb4.firebaseapp.com",
+  databaseURL: "https://okinawa2026-60fb4-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "okinawa2026-60fb4",
+  storageBucket: "okinawa2026-60fb4.firebasestorage.app",
+  messagingSenderId: "492813207470",
+  appId: "1:492813207470:web:878f694be2dc6d67beea3f"
+};
+var DB_PATH = 'okinawa-trip-2026/itinerary';
+/* =========================================================== */
+
+(function(){
+  var statusEl = document.getElementById('syncStatus');
+  var pillEl = document.getElementById('syncPill');
+  var timeEl = document.getElementById('syncTime');
+
+  var dbRef = null;
+  var lastData = null;
+  var editingId = null; // lock re-render while a form is open, e.g. "d1:items:d1-t1:edit"
+
+  /* ---------------- seed data (matches the original printed itinerary) ---------------- */
+  var SEED = {
+    d1:{ items:{
+      'd1-t1':{order:10, time:'19:30', text:'降落那霸機場。已過營業時間，今日不取車。全家搭乘單軌電車（Yui Rail）直達國際通附近飯店入住。', tags:[]},
+      'd1-t2':{order:20, time:'21:00', text:'飯店辦理入住後，推車散步至國際通，享受第一晚的沖繩熱鬧氛圍。', tags:['stroll']}
+    }, meals:{
+      'd1-m1':{order:10, icon:'moon', label:'晚餐', name:'暖暮拉麵 那霸牧志店 或 屋台村暖暮拉麵', note:'位置舒適，提供兒童椅與餐具，湯頭溫和適合分給 3 歲大寶。亦可至屋台村外帶宵夜串燒回飯店享用。'}
+    }},
+    d2:{ items:{
+      'd2-t1':{order:10, time:'09:30', text:'退房後，搭乘電車前往新都心 T Galleria DFS 辦理 OTS 租車取車。', tags:[]},
+      'd2-t2':{order:20, time:'11:00', text:'【新增行程】普天滿宮參拜。此處有獨特地底鐘乳石洞（免費但需至社務所填表登記參觀，一次 20 分鐘）。', tags:['carry']},
+      'd2-t3':{order:30, time:'13:00', text:'前往港川外人住宅。彩色美軍平房林立，可品嚐 oHacorté 水果塔並在庭院拍照。', tags:[]},
+      'd2-t4':{order:40, time:'15:30', text:'抵達北谷 LeQu 飯店入住，下午在美國村 Depot Island 逛街，傍晚於落日海灘觀賞絕美夕陽。', tags:[]}
+    }, meals:{
+      'd2-m1':{order:10, icon:'sunrise', label:'早餐', name:'豬肉蛋飯糰 牧志市場本店', note:'08:30 開門前提早排隊外帶。經典的午餐肉厚蛋飯糰軟嫩鹹香，大小朋友皆喜愛。'},
+      'd2-m2':{order:20, icon:'sun', label:'中餐', name:'港川外人住宅 · 鶏そば新（新雞湯麵）', note:'主打濃郁香醇的雞白湯拉麵，店內設有榻榻米包廂座位區，帶幼童用餐非常省力！'},
+      'd2-m3':{order:30, icon:'moon', label:'晚餐', name:'燒肉 琉球の牛 北谷店', note:'高檔極致的沖繩和牛，擁有無煙獨立半包廂隔間，極具隱私且排煙好（建議提前於官網預約）。'}
+    }},
+    d3:{ items:{
+      'd3-t1':{order:10, time:'08:30', text:'辦理 LEQU 退房，行李全數上車，沿高速公路（沖繩自動車道）驅車前往北部。', tags:[]},
+      'd3-t2':{order:20, time:'10:00', text:'抵達美麗海水族館（導航設定 P7 停車場，最靠近入口且免費）。必看「黑潮之海」與戶外免費海豚秀。', tags:['stroll']},
+      'd3-t3':{order:30, time:'13:30', text:'自駕開過雄偉的古宇利大橋，果凍海藍調極佳。前往海洋塔內的貝殼博物館。', tags:[]},
+      'd3-t4':{order:40, time:'16:30', text:'回程途中，驅車前往沖繩市 REF Arena 飯店辦理入住（此飯店附設溫泉大浴場，極為舒適）。', tags:[]}
+    }, meals:{
+      'd3-m1':{order:10, icon:'sunrise', label:'早餐', name:'北谷 LEQU 飯店精緻自助早餐', note:'LEQU 早餐排名全日頂尖，提供在地自製豬肉蛋飯糰與多種適合幼童的熟食，吃飽再出發。'},
+      'd3-m2':{order:20, icon:'sun', label:'中餐', name:'水族館 Ocean Blue 咖啡廳 或 花人逢', note:'水族館內可坐於大水槽旁吃輕食；或開車 15 分鐘至山丘「花人逢」享用手作披薩，庭院草地開闊。'},
+      'd3-m3':{order:30, icon:'moon', label:'晚餐', name:'百年古家 大家（Ufuya）', note:'名護山林中極具氛圍的琉球百年古民家。主打阿古豬（Agu）火鍋。榻榻米座席且環境開闊（務必提前預約）。'}
+    }},
+    d4:{ items:{
+      'd4-t1':{order:10, time:'09:30', text:'【婚禮組】步行 3 分鐘至緊鄰落日海灘的 Voyage de LUMIÈRE 禮堂觀禮。', tags:[]},
+      'd4-t2':{order:20, time:'09:30', text:'【留守組（3大2小）】開大車至安良波公園（Araha Park）。擁有巨大木造海盜船，讓 3 歲大寶盡情攀爬溜滑梯放電，1 歲寶寶可在濱海步道散步、踩白沙。', tags:['stroll']},
+      'd4-t3':{order:30, time:'11:30', text:'大寶玩累並於推車上睡午覺。留守組至北谷星巴克買咖啡，靜靜享受無敵海風。', tags:[]},
+      'd4-t4':{order:40, time:'13:00', text:'全員合流，前往超大型購物天堂永旺夢樂城來客夢（AEON Rycom）購物放風。', tags:[]},
+      'd4-t5':{order:50, time:'18:00', text:'前往 REF 飯店附近的東南植物樂園。此時正值著名的夜間「沖繩之光」百萬燈光節點燈，熱帶植物夜景美不勝收。', tags:[]}
+    }, meals:{
+      'd4-m1':{order:10, icon:'sunrise', label:'早餐', name:'REF Arena 飯店自助早餐', note:'提供融合沖繩與美式風格的朝食，補滿一整天的能量。'},
+      'd4-m2':{order:20, icon:'sun', label:'中餐', name:'Seaside Cafe Hanon 或 婚禮午宴', note:'婚禮組享用喜宴；留守組可於美濱海岸旁「Hanon」享用海景舒芙蕾鬆餅，並於 13:00 與新郎／新娘會合。'},
+      'd4-m3':{order:30, icon:'moon', label:'晚餐', name:'AEON Rycom 美食街 或 泡瀨漁港', note:'帶幼童逛商場，直接在超大美食街用餐最輕鬆；若想吃海膽醬烤龍蝦，可開車前往 15 分鐘外的「泡瀨漁港」（18:00 前收攤）。'}
+    }},
+    d5:{ items:{
+      'd5-t1':{order:10, time:'09:00', text:'【新增行程】首里城跡。守禮門等城牆宏偉，有完善的「手推車無障礙路線」可循指標漫步。', tags:['stroll']},
+      'd5-t2':{order:20, time:'11:30', text:'前往純白地中海風情之瀨長島。看著那霸機場飛機頻繁掠過起降，大寶會非常興奮。', tags:['carry']},
+      'd5-t3':{order:30, time:'17:00', text:'前往 OTS 臨空豐崎營業所還車（記得在營業所對面加油站加滿油）。', tags:[]},
+      'd5-t4':{order:40, time:'18:00', text:'搭乘 OTS 免費接駁車至那霸機場，轉單軌電車回那霸市區飯店辦理入住，隨即在國際通進行最後大採購。', tags:[]}
+    }, meals:{
+      'd5-m1':{order:10, icon:'sunrise', label:'早餐', name:'REF Arena 飯店早餐 或 超商美食', note:'輕鬆享用溫熱餐點或飯糰牛乳，做好退房準備。'},
+      'd5-m2':{order:20, icon:'sun', label:'中餐', name:'瀨長島幸福鬆餅 或 氾濫漢堡', note:'瀨長島必吃幸福鬆餅（需提早 2 週於官網預約）。氾濫漢堡厚實多汁，外帶於海邊防波堤享用亦非常自在。'},
+      'd5-m3':{order:30, icon:'moon', label:'晚餐', name:'敘敘苑 那霸新都心店 或 目利きの銀次', note:'還車後無駕駛壓力。敘敘苑提供精緻包廂，對幼童極友善；「目利きの銀次」木桶造型裝潢極具特色，烤魚熟食豐富。'}
+    }},
+    d6:{ items:{
+      'd6-t1':{order:10, time:'08:30', text:'【新增行程】波上宮參拜。沖繩總鎮守。神社入口鳥居有段階梯需抬推車。一旁的波之上海灘沙質細滑，可帶大寶赤腳踏浪。', tags:[]},
+      'd6-t2':{order:20, time:'09:40', text:'因行李多，建議飯店退房後直接計程車前往那霸機場（約 15 分鐘，車資不高且比單軌省力）。', tags:[]},
+      'd6-t3':{order:30, time:'10:00', text:'辦理完登機。那霸機場國內線伴手禮街極為好逛（鹽屋、Royce 石垣島），買完後開心地搭乘 11:50 飛機返台。', tags:[]}
+    }, meals:{
+      'd6-m1':{order:10, icon:'sunrise', label:'早／中餐', name:'那霸機場國內線 A&W 美式漢堡', note:'國內線航廈 2 樓 A&W 漢堡。點一杯大人專屬麥根沙士配上美味熱狗堡與圈圈薯條，大人小孩皆滿足。'}
+    }}
+  };
+  var DAY_IDS = ['d1','d2','d3','d4','d5','d6'];
+
+  function stamp(text){
+    timeEl.textContent = text + ' ' + new Date().toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit'});
+  }
+
+  /* ---------------- small DOM helpers ---------------- */
+  function el(tag, cls, text){
+    var e = document.createElement(tag);
+    if(cls) e.className = cls;
+    if(text !== undefined) e.textContent = text;
+    return e;
+  }
+  function tagChip(kind){
+    var span = el('span', 'tag ' + kind);
+    var svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+    var use = document.createElementNS('http://www.w3.org/2000/svg','use');
+    use.setAttributeNS('http://www.w3.org/1999/xlink','href', kind==='stroll' ? '#ic-stroll' : '#ic-carry');
+    svg.appendChild(use);
+    span.appendChild(svg);
+    span.appendChild(document.createTextNode(kind==='stroll' ? '推車 OK' : '揹巾必備'));
+    return span;
+  }
+  function iconUse(name){
+    var svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+    var use = document.createElementNS('http://www.w3.org/2000/svg','use');
+    use.setAttributeNS('http://www.w3.org/1999/xlink','href', '#ic-'+name);
+    svg.appendChild(use);
+    return svg;
+  }
+
+  function closeAllMenus(){
+    document.querySelectorAll('.item-menu.open').forEach(function(m){ m.classList.remove('open'); });
+  }
+  document.addEventListener('click', closeAllMenus);
+
+  function buildMenu(dayId, group, id, item){
+    var wrap = el('div','');
+    wrap.style.position='relative'; wrap.style.display='inline';
+    var more = el('button','item-more','⋯');
+    more.type='button';
+    var menu = el('div','item-menu');
+    var editBtn = el('button','', '修改'); editBtn.type='button';
+    var noteBtn = el('button','', item.comment ? '編輯註解' : '增加註解'); noteBtn.type='button';
+    var delBtn = el('button','danger', '刪除'); delBtn.type='button';
+    menu.append(editBtn, noteBtn, delBtn);
+    more.addEventListener('click', function(e){
+      e.stopPropagation();
+      var wasOpen = menu.classList.contains('open');
+      closeAllMenus();
+      if(!wasOpen) menu.classList.add('open');
+    });
+    editBtn.addEventListener('click', function(e){ e.stopPropagation(); closeAllMenus(); openEditForm(dayId, group, id, item); });
+    noteBtn.addEventListener('click', function(e){ e.stopPropagation(); closeAllMenus(); openCommentForm(dayId, group, id, item); });
+    delBtn.addEventListener('click', function(e){
+      e.stopPropagation();
+      if(confirm('確定要刪除這項行程嗎？刪除後所有人都看不到。')){
+        dbRef.child(dayId+'/'+group+'/'+id).remove();
+      }
+    });
+    wrap.append(more, menu);
+    return wrap;
+  }
+
+  /* ---------------- render ---------------- */
+  function renderTimelineItem(dayId, id, item){
+    var div = el('div','tl-item'); div.dataset.id = id;
+    div.appendChild(buildMenu(dayId,'items',id,item));
+    var time = el('span','tl-time', item.time);
+    var text = el('span','tl-text');
+    text.appendChild(document.createTextNode(item.text));
+    (item.tags||[]).forEach(function(t){ text.appendChild(tagChip(t)); });
+    div.append(time, text);
+    if(item.comment){
+      var c = el('div','item-comment', '💬 ' + item.comment);
+      div.appendChild(c);
+    }
+    return div;
+  }
+
+  function renderMealCard(dayId, id, item){
+    var div = el('div','meal-card'); div.dataset.id = id;
+    var head = el('div','m-head');
+    head.appendChild(iconUse(item.icon||'sun'));
+    head.appendChild(document.createTextNode(item.label||''));
+    div.appendChild(head);
+    div.appendChild(buildMenu(dayId,'meals',id,item));
+    div.appendChild(el('div','m-name', item.name||''));
+    if(item.note) div.appendChild(el('div','m-note', item.note));
+    if(item.comment) div.appendChild(el('div','item-comment', '💬 ' + item.comment));
+    return div;
+  }
+
+  function sortedEntries(obj){
+    return Object.keys(obj||{}).map(function(k){ return [k, obj[k]]; })
+      .sort(function(a,b){ return (a[1].order||0) - (b[1].order||0); });
+  }
+
+  function renderAll(data){
+    DAY_IDS.forEach(function(dayId){
+      var dayData = (data && data[dayId]) || {items:{}, meals:{}};
+      var tlWrap = document.getElementById('tl-'+dayId);
+      var mealWrap = document.getElementById('meals-'+dayId);
+      tlWrap.innerHTML = '';
+      mealWrap.innerHTML = '';
+      sortedEntries(dayData.items).forEach(function(pair){
+        tlWrap.appendChild(renderTimelineItem(dayId, pair[0], pair[1]));
+      });
+      sortedEntries(dayData.meals).forEach(function(pair){
+        mealWrap.appendChild(renderMealCard(dayId, pair[0], pair[1]));
+      });
+    });
+  }
+
+  /* ---------------- edit / comment / add forms ---------------- */
+  function openEditForm(dayId, group, id, item){
+    editingId = dayId+':'+group+':'+id;
+    var host = document.querySelector('[data-id="'+id+'"]');
+    if(!host) return;
+    host.innerHTML = '';
+    var form = el('div','edit-form');
+    var timeInput = null;
+    if(group === 'items'){
+      timeInput = el('input','');
+      timeInput.type='text'; timeInput.value = item.time || ''; timeInput.placeholder='時間，例如 09:30';
+      form.appendChild(timeInput);
+    } else {
+      timeInput = el('input','');
+      timeInput.type='text'; timeInput.value = item.label || ''; timeInput.placeholder='例如：早餐 / 中餐 / 晚餐';
+      form.appendChild(timeInput);
+      var nameInput = el('input',''); nameInput.type='text'; nameInput.value = item.name || ''; nameInput.placeholder='店名';
+      form.appendChild(nameInput);
+    }
+    var mainText = el('textarea','');
+    mainText.value = group==='items' ? (item.text||'') : (item.note||'');
+    mainText.placeholder = group==='items' ? '行程內容' : '備註內容';
+    form.appendChild(mainText);
+    var actions = el('div','row-actions');
+    var saveBtn = el('button','btn-mini primary','儲存'); saveBtn.type='button';
+    var cancelBtn = el('button','btn-mini','取消'); cancelBtn.type='button';
+    actions.append(cancelBtn, saveBtn);
+    form.appendChild(actions);
+    host.appendChild(form);
+
+    cancelBtn.addEventListener('click', function(){ editingId = null; renderAll(lastData); });
+    saveBtn.addEventListener('click', function(){
+      var updates = {};
+      if(group === 'items'){
+        updates.time = timeInput.value.trim();
+        updates.text = mainText.value.trim();
+      } else {
+        updates.label = timeInput.value.trim();
+        updates.name = document.querySelectorAll('.edit-form input')[1].value.trim();
+        updates.note = mainText.value.trim();
+      }
+      dbRef.child(dayId+'/'+group+'/'+id).update(updates);
+      editingId = null;
+    });
+  }
+
+  function openCommentForm(dayId, group, id, item){
+    editingId = dayId+':'+group+':'+id;
+    var host = document.querySelector('[data-id="'+id+'"]');
+    if(!host) return;
+    var old = host.querySelector('.item-comment');
+    if(old) old.remove();
+    var form = el('div','edit-form');
+    form.style.marginTop='10px';
+    var ta = el('textarea',''); ta.value = item.comment || ''; ta.placeholder='增加一句備註給大家看，例如：這段車程改走海邊路線';
+    form.appendChild(ta);
+    var actions = el('div','row-actions');
+    var saveBtn = el('button','btn-mini primary','儲存註解'); saveBtn.type='button';
+    var cancelBtn = el('button','btn-mini','取消'); cancelBtn.type='button';
+    actions.append(cancelBtn, saveBtn);
+    form.appendChild(actions);
+    host.appendChild(form);
+    cancelBtn.addEventListener('click', function(){ editingId = null; renderAll(lastData); });
+    saveBtn.addEventListener('click', function(){
+      dbRef.child(dayId+'/'+group+'/'+id).update({comment: ta.value.trim()});
+      editingId = null;
+    });
+  }
+
+  function openAddForm(dayId, btn){
+    editingId = 'add:'+dayId;
+    var wrap = el('div','add-form-wrap');
+    var timeInput = el('input',''); timeInput.type='text'; timeInput.placeholder='時間，例如 14:30';
+    var textArea = el('textarea',''); textArea.placeholder='行程內容';
+    var actions = el('div','row-actions');
+    var saveBtn = el('button','btn-mini primary','新增'); saveBtn.type='button';
+    var cancelBtn = el('button','btn-mini','取消'); cancelBtn.type='button';
+    actions.append(cancelBtn, saveBtn);
+    wrap.append(timeInput, textArea, actions);
+    btn.insertAdjacentElement('afterend', wrap);
+    btn.style.display='none';
+    cancelBtn.addEventListener('click', function(){ editingId=null; wrap.remove(); btn.style.display=''; });
+    saveBtn.addEventListener('click', function(){
+      var t = textArea.value.trim();
+      if(!t){ textArea.focus(); return; }
+      var dayItems = (lastData && lastData[dayId] && lastData[dayId].items) || {};
+      var maxOrder = 0;
+      Object.keys(dayItems).forEach(function(k){ if(dayItems[k].order > maxOrder) maxOrder = dayItems[k].order; });
+      var newId = dayId + '-t' + Date.now();
+      dbRef.child(dayId+'/items/'+newId).set({
+        order: maxOrder+10, time: timeInput.value.trim(), text: t, tags: []
+      });
+      editingId = null;
+      wrap.remove(); btn.style.display='';
+    });
+  }
+
+  document.querySelectorAll('.add-item-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){ openAddForm(btn.dataset.day, btn); });
+  });
+
+  /* ---------------- connect ---------------- */
+  try{
+    firebase.initializeApp(firebaseConfig);
+    dbRef = firebase.database().ref(DB_PATH);
+    dbRef.once('value').then(function(snap){
+      if(!snap.exists()){
+        dbRef.set(SEED).then(function(){ stamp('已建立初始行程'); });
+      }
+    });
+    dbRef.on('value', function(snapshot){
+      lastData = snapshot.val() || {};
+      if(!editingId){ renderAll(lastData); }
+      statusEl.innerHTML = '<strong>已連上共用資料庫</strong><span>大家打開同一個網址，看到的行程會即時保持一致。</span>';
+      pillEl.textContent = '狀態：即時同步中';
+      stamp('已同步');
+    }, function(err){
+      statusEl.innerHTML = '<strong>連線失敗</strong><span>請確認 Realtime Database 讀寫規則已開放，或稍後重新整理頁面。</span>';
+      pillEl.textContent = '狀態：連線失敗';
+    });
+  }catch(e){
+    statusEl.innerHTML = '<strong>連線失敗</strong><span>Firebase 設定可能有誤，請確認 firebaseConfig 內容正確。</span>';
+    pillEl.textContent = '狀態：連線失敗';
+  }
+})();
+</script>
+
+</body>
+</html>
