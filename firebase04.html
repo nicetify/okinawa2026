@@ -60,6 +60,7 @@
   .tide-nav a.south{border-color:var(--indigo);}
   .tide-nav a.mid{border-color:var(--coral);}
   .tide-nav a.north{border-color:var(--teal);}
+  .tide-nav a.fx{border-color:var(--gold);}
   .tide-nav a:hover{background:rgba(255,255,255,.08);}
 
   /* ---------- Hero ---------- */
@@ -68,7 +69,7 @@
     font-family:"IBM Plex Mono",monospace; font-size:.78rem; letter-spacing:.12em;
     color:var(--ink-soft); text-transform:uppercase; margin-bottom:18px;
   }
-  .hero h1{ font-size:clamp(2.4rem, 6vw, 4.2rem); line-height:1.1; max-width:12ch; }
+  .hero h1{ font-size:clamp(2rem, 10vw, 4.2rem); line-height:1.1; white-space:nowrap; }
   .hero h1 em{ font-style:normal; color:var(--coral); }
   .hero .sub{ margin-top:22px; font-size:1.05rem; color:var(--ink-soft); max-width:60ch; }
   .route-strip{
@@ -81,11 +82,6 @@
   .route-strip .stop.north{background:var(--teal-dim); color:var(--teal);}
   .route-strip .arrow{color:var(--line);}
 
-  .stat-row{ margin-top:40px; display:grid; grid-template-columns:repeat(4,1fr); border-top:1px solid var(--line); }
-  .stat-row div{ padding:16px 4px 0; border-left:1px solid var(--line); }
-  .stat-row div:first-child{border-left:none;}
-  .stat-row .num{ font-family:"Noto Serif TC",serif; font-weight:900; font-size:1.8rem; }
-  .stat-row .lbl{ font-size:.72rem; color:var(--ink-soft); margin-top:2px; }
 
   /* ---------- Sync bar ---------- */
   .sync-bar{max-width:920px; margin:0 auto 8px; padding:0 24px;}
@@ -114,8 +110,6 @@
   .day-grid{ margin-top:36px; display:grid; grid-template-columns: 1fr 300px; gap:36px; }
   @media (max-width:760px){
     .day-grid{grid-template-columns:1fr;}
-    .stat-row{grid-template-columns:repeat(2,1fr);}
-    .stat-row div:nth-child(3){border-left:none;}
   }
 
   /* timeline */
@@ -135,8 +129,6 @@
     display:inline-flex; align-items:center; gap:4px; font-family:"IBM Plex Mono",monospace;
     font-size:.68rem; padding:2px 8px; border-radius:100px; margin-left:6px; white-space:nowrap; vertical-align:middle;
   }
-  .tag.stroll{background:var(--teal-dim); color:var(--teal);}
-  .tag.carry{background:var(--coral-dim); color:var(--coral);}
   .tag.comment{background:var(--gold-dim); color:#8A6316;}
   .tag svg{width:11px; height:11px;}
 
@@ -231,7 +223,7 @@
   footer .display{color:var(--ink); font-size:1.1rem; margin-bottom:8px; display:block;}
 
   /* ---------- Currency converter ---------- */
-  .fx-wrap{ max-width:920px; margin:0 auto; padding:20px 24px 0; }
+  .fx-wrap{ max-width:920px; margin:0 auto; padding:20px 24px 0; scroll-margin-top:44px; }
   .fx-card{
     background:var(--card); border:1px solid var(--line); border-radius:16px; padding:18px 20px 16px;
     border-top:4px solid var(--gold);
@@ -292,6 +284,7 @@
 </svg>
 
 <nav class="tide-nav">
+  <a href="#fx" class="fx"><span>匯率</span><span class="d">日幣換算</span></a>
   <a href="#d1" class="south"><span>Day 1</span><span class="d">11.18 那霸</span></a>
   <a href="#d2" class="mid"><span>Day 2</span><span class="d">11.19 北谷</span></a>
   <a href="#d3" class="north"><span>Day 3</span><span class="d">11.20 北部</span></a>
@@ -326,11 +319,11 @@
       <button type="button" class="fx-chip" data-v="10000">¥10,000</button>
     </div>
     <div class="fx-opts">
-      <label>自訂匯率 <input id="fxManual" type="text" inputmode="decimal" placeholder="自動"></label>
-      <label>手續費 <input id="fxFee" type="text" inputmode="decimal" placeholder="0"> %</label>
+      <label>自訂匯率 <input id="fxManual" type="text" inputmode="decimal" placeholder="載入中"></label>
+      <label>手續費 <input id="fxFee" type="text" inputmode="decimal" value="1.5" placeholder="0"> %</label>
       <button type="button" class="btn-mini" id="fxRefresh">更新匯率</button>
     </div>
-    <div class="fx-note" id="fxNote">匯率為網路參考中間價，實際以兌換處或信用卡結算匯率為準。可在「自訂匯率」填入銀行牌告價，「手續費」可填海外刷卡手續費（例如 1.5）。</div>
+    <div class="fx-note" id="fxNote">「自訂匯率」預設為剛查到的參考中間價，可改成銀行牌告價；「手續費」預設 1.5%（海外刷卡），現金換匯可改為 0。實際金額以兌換處或信用卡結算為準。</div>
   </div>
 </section>
 
@@ -347,12 +340,6 @@
     <span class="stop south">那霸 · 瀨長島</span>
   </div>
 
-  <div class="stat-row">
-    <div><div class="num">6</div><div class="lbl">天數</div></div>
-    <div><div class="num">2</div><div class="lbl">孩子（3歲＋1歲）</div></div>
-    <div><div class="num">5</div><div class="lbl">晚住宿</div></div>
-    <div><div class="num">3</div><div class="lbl">城市／區域</div></div>
-  </div>
 </header>
 
 <section class="sync-bar">
@@ -390,7 +377,7 @@
 <!-- DAY 2 -->
 <section class="day mid" id="d2">
   <div class="day-head"><span class="day-num">DAY 02</span><span class="day-date">11/19（四）</span></div>
-  <h2>市區取車 ➔ 普天滿宮 ➔ 港川外人住宅 ➔ 美國村入住</h2>
+  <h2>OTS 取車 ➔ 波上宮 ➔ 港川外人住宅 ➔ 北谷入住 ➔ 美國村夜遊</h2>
   <div class="day-grid">
     <div>
       <div class="timeline" id="tl-d2"></div>
@@ -400,8 +387,8 @@
   </div>
   <div class="kid-tip">
     <svg><use href="#ic-note"/></svg>
-    <div><div class="kt-label">親子普天滿宮注意</div>
-      <p>鐘乳石洞內階梯濕滑且較窄，禁止使用推車。1 歲寶寶請務必使用揹巾緊抱，3 歲大寶需大人緊牽慢行。</p>
+    <div><div class="kt-label">取車與當日行車注意</div>
+      <p>取車時請當場確認兩張兒童安全座椅（1 歲、3 歲各一）都已裝好扣牢，日本規定 6 歲以下乘車須使用；日本靠左行駛、右側駕駛。領完車回飯店接人時，留守人員請先備妥行李，上車動作要快。波上宮鳥居入口有一段階梯，1 歲寶寶建議用揹巾，3 歲大寶牽緊。18:00 琉球之牛已預約，請預留飯店到美國村的停車時間。晚上點燈與摩天輪廣場人潮多、海風涼，記得帶外套並牽好孩子。</p>
     </div>
   </div>
 </section>
@@ -517,13 +504,12 @@ var DB_PATH = 'okinawa-trip-2026/itinerary';
   var SEED = {
     d1:{ items:{
       'd1-t1':{order:10, time:'19:30', text:'降落那霸機場。已過營業時間，今日不取車。全家搭乘單軌電車（Yui Rail）直達國際通附近飯店入住。', tags:[]},
-      'd1-t2':{order:20, time:'21:00', text:'飯店辦理入住後，推車散步至國際通，享受第一晚的沖繩熱鬧氛圍。', tags:['stroll']}
+      'd1-t2':{order:20, time:'21:00', text:'飯店辦理入住後，推車散步至國際通，享受第一晚的沖繩熱鬧氛圍。', tags:[]}
     }, meals:{
       'd1-m1':{order:10, icon:'moon', label:'晚餐', name:'暖暮拉麵 那霸牧志店 或 屋台村暖暮拉麵', note:'位置舒適，提供兒童椅與餐具，湯頭溫和適合分給 3 歲大寶。亦可至屋台村外帶宵夜串燒回飯店享用。'}
     }},
     d2:{ items:{
       'd2-t1':{order:10, time:'09:30', text:'退房後，搭乘電車前往新都心 T Galleria DFS 辦理 OTS 租車取車。', tags:[]},
-      'd2-t2':{order:20, time:'11:00', text:'【新增行程】普天滿宮參拜。此處有獨特地底鐘乳石洞（免費但需至社務所填表登記參觀，一次 20 分鐘）。', tags:['carry']},
       'd2-t3':{order:30, time:'13:00', text:'前往港川外人住宅。彩色美軍平房林立，可品嚐 oHacorté 水果塔並在庭院拍照。', tags:[]},
       'd2-t4':{order:40, time:'15:30', text:'抵達北谷 LeQu 飯店入住，下午在美國村 Depot Island 逛街，傍晚於落日海灘觀賞絕美夕陽。', tags:[]}
     }, meals:{
@@ -533,7 +519,7 @@ var DB_PATH = 'okinawa-trip-2026/itinerary';
     }},
     d3:{ items:{
       'd3-t1':{order:10, time:'08:30', text:'辦理 LEQU 退房，行李全數上車，沿高速公路（沖繩自動車道）驅車前往北部。', tags:[]},
-      'd3-t2':{order:20, time:'10:00', text:'抵達美麗海水族館（導航設定 P7 停車場，最靠近入口且免費）。必看「黑潮之海」與戶外免費海豚秀。', tags:['stroll']},
+      'd3-t2':{order:20, time:'10:00', text:'抵達美麗海水族館（導航設定 P7 停車場，最靠近入口且免費）。必看「黑潮之海」與戶外免費海豚秀。', tags:[]},
       'd3-t3':{order:30, time:'13:30', text:'自駕開過雄偉的古宇利大橋，果凍海藍調極佳。前往海洋塔內的貝殼博物館。', tags:[]},
       'd3-t4':{order:40, time:'16:30', text:'回程途中，驅車前往沖繩市 REF Arena 飯店辦理入住（此飯店附設溫泉大浴場，極為舒適）。', tags:[]}
     }, meals:{
@@ -543,7 +529,7 @@ var DB_PATH = 'okinawa-trip-2026/itinerary';
     }},
     d4:{ items:{
       'd4-t1':{order:10, time:'09:30', text:'【婚禮組】步行 3 分鐘至緊鄰落日海灘的 Voyage de LUMIÈRE 禮堂觀禮。', tags:[]},
-      'd4-t2':{order:20, time:'09:30', text:'【留守組（3大2小）】開大車至安良波公園（Araha Park）。擁有巨大木造海盜船，讓 3 歲大寶盡情攀爬溜滑梯放電，1 歲寶寶可在濱海步道散步、踩白沙。', tags:['stroll']},
+      'd4-t2':{order:20, time:'09:30', text:'【留守組（3大2小）】開大車至安良波公園（Araha Park）。擁有巨大木造海盜船，讓 3 歲大寶盡情攀爬溜滑梯放電，1 歲寶寶可在濱海步道散步、踩白沙。', tags:[]},
       'd4-t3':{order:30, time:'11:30', text:'大寶玩累並於推車上睡午覺。留守組至北谷星巴克買咖啡，靜靜享受無敵海風。', tags:[]},
       'd4-t4':{order:40, time:'13:00', text:'全員合流，前往超大型購物天堂永旺夢樂城來客夢（AEON Rycom）購物放風。', tags:[]},
       'd4-t5':{order:50, time:'18:00', text:'前往 REF 飯店附近的東南植物樂園。此時正值著名的夜間「沖繩之光」百萬燈光節點燈，熱帶植物夜景美不勝收。', tags:[]}
@@ -553,8 +539,8 @@ var DB_PATH = 'okinawa-trip-2026/itinerary';
       'd4-m3':{order:30, icon:'moon', label:'晚餐', name:'AEON Rycom 美食街 或 泡瀨漁港', note:'帶幼童逛商場，直接在超大美食街用餐最輕鬆；若想吃海膽醬烤龍蝦，可開車前往 15 分鐘外的「泡瀨漁港」（18:00 前收攤）。'}
     }},
     d5:{ items:{
-      'd5-t1':{order:10, time:'09:00', text:'【新增行程】首里城跡。守禮門等城牆宏偉，有完善的「手推車無障礙路線」可循指標漫步。', tags:['stroll']},
-      'd5-t2':{order:20, time:'11:30', text:'前往純白地中海風情之瀨長島。看著那霸機場飛機頻繁掠過起降，大寶會非常興奮。', tags:['carry']},
+      'd5-t1':{order:10, time:'09:00', text:'【新增行程】首里城跡。守禮門等城牆宏偉，有完善的「手推車無障礙路線」可循指標漫步。', tags:[]},
+      'd5-t2':{order:20, time:'11:30', text:'前往純白地中海風情之瀨長島。看著那霸機場飛機頻繁掠過起降，大寶會非常興奮。', tags:[]},
       'd5-t3':{order:30, time:'17:00', text:'前往 OTS 臨空豐崎營業所還車（記得在營業所對面加油站加滿油）。', tags:[]},
       'd5-t4':{order:40, time:'18:00', text:'搭乘 OTS 免費接駁車至那霸機場，轉單軌電車回那霸市區飯店辦理入住，隨即在國際通進行最後大採購。', tags:[]}
     }, meals:{
@@ -588,11 +574,6 @@ var DB_PATH = 'okinawa-trip-2026/itinerary';
     span.appendChild(iconUse(iconName));
     span.appendChild(document.createTextNode(label));
     return span;
-  }
-  function presetTag(kind){
-    if(kind==='stroll') return tagChip('stroll','stroll','推車 OK');
-    if(kind==='carry') return tagChip('carry','carry','揹巾必備');
-    return null;
   }
   function iconUse(name){
     var svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
@@ -661,7 +642,6 @@ var DB_PATH = 'okinawa-trip-2026/itinerary';
     var time = el('span','tl-time', item.time);
     var text = el('span','tl-text');
     text.appendChild(document.createTextNode(item.text));
-    (item.tags||[]).forEach(function(t){ var chip = presetTag(t); if(chip) text.appendChild(chip); });
     if(item.comment){ text.appendChild(tagChip('comment','note', item.comment)); }
     div.append(time, text);
     if(item.address){
@@ -888,7 +868,7 @@ var DB_PATH = 'okinawa-trip-2026/itinerary';
   var jpyEl=$('fxJpy'), twdEl=$('fxTwd'), manualEl=$('fxManual'), feeEl=$('fxFee');
   var lineEl=$('fxRateLine'), noteEl=$('fxNote');
   var CACHE_KEY='okinawa_fx_jpy_twd';
-  var baseRate=null, baseTime=null, source='', lastEdited='jpy';
+  var baseRate=null, baseTime=null, source='', lastEdited='jpy', manualTouched=false;
 
   function num(s){
     var n = parseFloat(String(s).replace(/[,，\s]/g,''));
@@ -897,12 +877,18 @@ var DB_PATH = 'okinawa-trip-2026/itinerary';
   function fmt(n, max){
     return n.toLocaleString('en-US', {maximumFractionDigits:max});
   }
-  function effectiveRate(){
+  function baseUsed(){
     var m = num(manualEl.value);
-    var r = (m && m > 0) ? m : baseRate;
+    return (m && m > 0) ? m : baseRate;
+  }
+  function effectiveRate(){
+    var r = baseUsed();
     if(!r) return null;
     var fee = num(feeEl.value) || 0;
     return r * (1 + fee/100);
+  }
+  function fillManual(){
+    if(!manualTouched && baseRate){ manualEl.value = baseRate.toFixed(4); }
   }
   function recalc(){
     var r = effectiveRate();
@@ -917,17 +903,20 @@ var DB_PATH = 'okinawa-trip-2026/itinerary';
     renderLine();
   }
   function renderLine(){
-    var m = num(manualEl.value);
+    var b = baseUsed();
     var r = effectiveRate();
-    if(!r){ lineEl.textContent = '尚無匯率資料'; return; }
-    var tag = (m && m > 0) ? '自訂' : '參考';
+    if(!b || !r){ lineEl.textContent = '尚無匯率資料'; return; }
+    var fee = num(feeEl.value) || 0;
+    var tag = manualTouched ? '自訂' : '參考';
     var t = '';
-    if(!(m && m > 0) && baseTime){
+    if(!manualTouched && baseTime){
       var d = new Date(baseTime);
       t = ' · ' + (d.getMonth()+1) + '/' + d.getDate() + ' ' +
           ('0'+d.getHours()).slice(-2) + ':' + ('0'+d.getMinutes()).slice(-2) + ' 更新';
     }
-    lineEl.innerHTML = tag + '匯率 <b>1 JPY = ' + r.toFixed(4) + ' TWD</b>' + t;
+    var h = tag + '匯率 <b>1 JPY = ' + b.toFixed(4) + ' TWD</b>';
+    if(fee > 0){ h += '（含手續費 ≈ ' + r.toFixed(4) + '）'; }
+    lineEl.innerHTML = h + t;
   }
   function setNote(msg, isErr){
     noteEl.textContent = msg;
@@ -964,11 +953,11 @@ var DB_PATH = 'okinawa-trip-2026/itinerary';
         baseTime = d.date ? new Date(d.date + 'T00:00:00').getTime() : Date.now();
       });
     }).then(function(){
-      saveCache(); setNote(DEFAULT_NOTE, false); recalc();
+      saveCache(); setNote(DEFAULT_NOTE, false); fillManual(); recalc();
     }).catch(function(){
       if(baseRate){
         setNote('無法取得最新匯率，目前使用上次儲存的匯率；也可以在「自訂匯率」手動輸入。', true);
-        recalc();
+        fillManual(); recalc();
       } else {
         lineEl.textContent = '尚無匯率資料';
         setNote('無法取得即時匯率，請在「自訂匯率」手動輸入（例如 0.205）。', true);
@@ -978,15 +967,17 @@ var DB_PATH = 'okinawa-trip-2026/itinerary';
 
   jpyEl.addEventListener('input', function(){ lastEdited='jpy'; recalc(); });
   twdEl.addEventListener('input', function(){ lastEdited='twd'; recalc(); });
-  manualEl.addEventListener('input', recalc);
+  manualEl.addEventListener('input', function(){ manualTouched = !!num(manualEl.value); recalc(); });
+  manualEl.addEventListener('blur', function(){ if(!num(manualEl.value)){ manualTouched = false; fillManual(); recalc(); } });
   feeEl.addEventListener('input', recalc);
-  $('fxRefresh').addEventListener('click', fetchRate);
+  $('fxRefresh').addEventListener('click', function(){ manualTouched = false; fetchRate(); });
   $('fxChips').addEventListener('click', function(e){
     var b = e.target.closest('.fx-chip'); if(!b) return;
     lastEdited='jpy'; jpyEl.value = fmt(Number(b.dataset.v), 0); recalc();
   });
 
   loadCache();
+  fillManual();
   renderLine();
   fetchRate();
 })();
