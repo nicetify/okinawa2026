@@ -107,9 +107,10 @@
   .day h2{ font-size:clamp(1.5rem, 3.4vw, 2.1rem); margin-top:10px; max-width:26ch; }
   .south h2{color:var(--indigo);} .mid h2{color:var(--coral);} .north h2{color:var(--teal);}
 
-  .day-grid{ margin-top:36px; display:grid; grid-template-columns: 1fr 300px; gap:36px; }
+  .day-grid{ margin-top:36px; display:grid; grid-template-columns: minmax(0,1fr) 300px; gap:36px; }
+  .day-grid > *{ min-width:0; }
   @media (max-width:760px){
-    .day-grid{grid-template-columns:1fr;}
+    .day-grid{grid-template-columns:minmax(0,1fr);}
   }
 
   /* timeline */
@@ -123,13 +124,21 @@
   .mid .tl-item{--dot:var(--coral);}
   .north .tl-item{--dot:var(--teal);}
   .tl-time{ font-family:"IBM Plex Mono",monospace; font-weight:600; font-size:.86rem; display:block; margin-bottom:4px; }
-  .tl-text{ font-size:.96rem; display:block; margin-top:2px; }
+  .tl-text{ font-size:.96rem; display:block; margin-top:2px; overflow-wrap:anywhere; }
+  .tl-item, .meal-card, .kid-tip p, .item-comment, .day h2{ overflow-wrap:anywhere; }
 
   .tag{
     display:inline-flex; align-items:center; gap:4px; font-family:"IBM Plex Mono",monospace;
     font-size:.68rem; padding:2px 8px; border-radius:100px; margin-left:6px; white-space:nowrap; vertical-align:middle;
   }
-  .tag.comment{background:var(--gold-dim); color:#8A6316;}
+  .tag.comment{
+    background:var(--gold-dim); color:#8A6316;
+    display:flex; width:fit-content; max-width:100%; margin:6px 0 0 0;
+    align-items:flex-start; gap:6px; padding:5px 10px; border-radius:10px;
+    font-size:.78rem; line-height:1.5; text-align:left;
+    white-space:pre-line; overflow-wrap:anywhere;
+  }
+  .tag.comment svg{ flex-shrink:0; margin-top:3px; }
   .tag svg{width:11px; height:11px;}
 
   /* meals */
@@ -174,7 +183,7 @@
 
   .addr-line{
     margin-top:6px; font-size:.8rem; color:var(--ink-soft);
-    display:flex; align-items:center; gap:5px;
+    display:flex; align-items:center; gap:5px; min-width:0; overflow-wrap:anywhere;
   }
   .addr-line svg{width:12px; height:12px; flex-shrink:0;}
 
